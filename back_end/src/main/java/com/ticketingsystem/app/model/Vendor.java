@@ -1,36 +1,34 @@
 package com.ticketingsystem.app.model;
+import com.ticketingsystem.app.enums.TICKET_STATUS;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
-public class Vendor implements Runnable {
+public class Vendor extends User implements Runnable {
     private long vendorId;
-    private Long eventId;
+    private Event event;
     private int ticketCount;
-    private  boolean producingTickets;
+    private TicketPool ticketPool;
 
-    public Vendor(Long vendorId, Long eventId, int ticketCount , boolean producingTickets) {
-        this.eventId = eventId;
+    public Vendor(Long vendorId, Event event, int ticketCount , TicketPool ticketPool) {
+        this.event = event;
         this.vendorId = vendorId;
         this.ticketCount = ticketCount;
-        this.producingTickets = false;
+        this.ticketPool=ticketPool;
     }
 
-    public void startProduceTickets() {
-        producingTickets = true;
-    }
-
-    public void stopProduceTickets() {
-        producingTickets = false;
-    }
 
     @Override
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                if (producingTickets) {
-                    // Logic to produce tickets
-                    System.out.println("Vendor " + vendorId + " is producing tickets for event " + eventId);
+                if (event.isProducingTickets()) {
+                    Ticket ticket = new Ticket(TICKET_STATUS.UNSOLD);
+
+                    ticketPool.addTicket(ticket);
+                    System.out.println("Vendor " + vendorId + " is producing tickets for event " + event.getEventId());
+                }else{
+                    System.out.println("Vendor " + vendorId + " is not producing tickets for event " + event.getEventId());
                 }
                 Thread.sleep(1000);
             }

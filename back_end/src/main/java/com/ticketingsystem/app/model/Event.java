@@ -5,6 +5,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Builder
@@ -21,4 +22,8 @@ public class Event {
     private LocalDate eventDate;
     private LocalTime eventTime;
     private int totalTickets;
+    private boolean isProducingTickets;
+
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;;
 }

@@ -19,6 +19,7 @@ public class EventService {
                 .eventName(eventDTO.getEventName())
                 .eventDate(eventDTO.getEventDate())
                 .totalTickets(eventDTO.getTicketCount())
+                .isProducingTickets(false)
                 .build();
        eventRepository.save(event);
 
