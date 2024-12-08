@@ -28,7 +28,7 @@ public class Main {
         // Display and Save Configuration
         System.out.println("Configuration saved: " + config);
         try {
-            config.saveToJson("../../config.json");
+            config.saveToJson("../../back_end/src/main/resources/config.json");
             System.out.println("Configuration saved to file.");
         } catch (Exception e) {
             System.out.println("Failed to save configuration: " + e.getMessage());

@@ -1,0 +1,75 @@
+package com.ticketingsystem.app.config.inits;
+import com.ticketingsystem.app.model.Configuration;
+import com.ticketingsystem.app.model.TicketPool;
+import com.ticketingsystem.app.dto.UserDTO;
+import com.ticketingsystem.app.enums.ROLE;
+import com.ticketingsystem.app.exception.UserAlreadyExistsException;
+import com.ticketingsystem.app.service.UserService;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+
+/**
+ * @author : Kanchana Kalansooriya
+ * @since 11/12/2024
+ */
+
+
+@Component
+public class AppInitializer implements CommandLineRunner {
+
+    private final UserService userService;
+    private TicketPool ticketPool;
+    public AppInitializer(UserService userService ) {
+        this.userService = userService;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        initializeAdminUsers();
+        try {
+            File configFile = new File("src/main/resources/config.json");
+
+
+            if (configFile.exists()) {
+                Configuration config = Configuration.loadFromJson("src/main/resources/config.json");
+                System.out.println("Loaded configuration: " + config);
+
+                // Initialize system components
+                this.ticketPool = new TicketPool(config.getMaxTicketCapacity());
+                System.out.println("Ticket pool initialized with max capacity: " + config.getMaxTicketCapacity());
+            } else {
+                System.out.println("Configuration file not found. Please run the CLI tool first.");
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to initialize system: " + e.getMessage());
+        }
+    }
+
+    private void initializeAdminUsers() {
+        UserDTO adminUser = new UserDTO(
+                "Admin",
+                "User",
+                "admin@gmail.com",
+                "admin@123",
+                ROLE.ADMIN,
+                null, // phoneNumber
+                null, // address
+                null, // gender
+                null, // nic
+                null, // dob
+                "https://firebasestorage.googleapis.com/v0/b/restarantappfilerepo.appspot.com/o/profilePics%2Fadmin%2Fadminuser.png?alt=media&token=9bb9ee2d-f870-4aea-8dd1-3ad83b6d21c8",// specialize
+                null// profilePic
+        );
+
+        try {
+            userService.createAdmin(adminUser);
+        } catch (UserAlreadyExistsException e) {
+            // Log the exception and continue
+            System.err.println("Admin user already exists: " + e.getMessage());
+        }
+    }
+
+
+}

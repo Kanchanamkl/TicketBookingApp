@@ -1,6 +1,7 @@
 server:
 
   #address: 192.168.132.96
+    port: 8081
 
 spring:
   datasource:
