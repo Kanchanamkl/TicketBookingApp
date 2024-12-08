@@ -1,0 +1,59 @@
+@use "../../../colors/colors.scss" as sysColors;
+
+.admin-dashboard-container{
+  width: 100%;
+  height: 100%;
+  // min-height: 100vh;
+  padding-top:85px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: url("../../../assets/images/blue_abstract.jpg");
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+.card{
+  background-color: rgba(0, 0, 0, 0.445);
+  width: 240px;
+  height: 150px;
+  border-radius: 10px;
+  text-align: center;
+  border: solid 2px rgb(255, 255, 255);
+}
+h2{
+  margin-bottom: 30px;
+  color: rgb(255, 255, 255);
+}
+
+.dashboard-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.charts {
+  display: flex;
+  //flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.chart {
+  background-color: white;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(33.333% - 20px);
+  box-sizing: border-box;
+}

@@ -1,0 +1,55 @@
+@use '../../colors/colors' as sysColors;
+
+.table-component {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  margin-bottom: 40px;
+
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  th {
+    background-color: sysColors.$table-header-bg-color;
+    color: #fff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f22c;
+  }
+
+  tr:hover {
+    background-color: rgba(0, 0, 0, 0.521);
+    color: rgb(255, 255, 255);
+  }
+
+  button {
+    padding: 5px 10px;
+    margin:5px;
+    margin-left:10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:first-of-type {
+      background-color: sysColors.$button-bg-color;
+      color: #fff;
+
+      &:hover {
+        background-color: sysColors.$button-hover-bg-color;
+      }
+    }
+
+    &:last-of-type {
+      background-color: sysColors.$danger-bg-color;
+      color: #fff;
+
+      &:hover {
+        background-color: sysColors.$danger-hover-bg-color;
+      }
+    }
+  }
+}

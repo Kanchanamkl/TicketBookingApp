@@ -1,0 +1,27 @@
+@use "../../colors/colors.scss" as colors;
+
+.section-container {
+    width: 90%;
+    // background-color: rgba(0, 0, 0, 0.295);'
+    background-color: #00000044;
+    border-radius: 10px;
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-top: 20px;
+    padding: 20px;
+}
+  
+  .section-title {
+    font-size: 3.2rem;
+    margin-top: 20px;
+    margin-bottom: 35px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center;
+  }
+  
+  .section-content {
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  

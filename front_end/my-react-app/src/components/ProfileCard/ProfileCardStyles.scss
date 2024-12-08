@@ -1,0 +1,70 @@
+// src/components/UserProfileCard/UserProfileCard.scss
+.user-profile-card {
+    position: absolute;
+    top: 65px;
+    right: 1px;
+    background-color: rgb(221, 242, 250);
+    border: 1px solid #8f8f8f;
+    color: #242323;
+    padding: 10px;
+    ;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+
+    .profile-container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .user-details{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding:10px;
+
+            .user-name{
+                font-size: 20px;
+                font-weight: 600;
+                padding: 5px;
+            }
+            .user-role{
+                font-size: 15px;
+                padding: 5px;
+            }
+
+            
+        }
+        .user-icon{
+         width: 80px;
+         height: 80px;
+         border-radius: 50%;
+         overflow: hidden;
+         background-color: #ccc;
+         padding: 3px;
+         img {
+             width: 100%;
+             height: 100%;
+             object-fit: cover;
+         }            
+        }
+    }
+
+
+}
+  
+  .close-button {
+    background:none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    margin:2px
+  }

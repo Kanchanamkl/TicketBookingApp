@@ -1,0 +1,43 @@
+@use "../../colors/colors.scss" as sysColors;
+
+.page-not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: sysColors.$primary-bg-color;
+    color: gray;
+    text-align: center;
+
+    h1 {
+        font-size: 10rem;
+        margin: 0;
+    }
+
+    h2 {
+        font-size: 2.5rem;
+        margin: 0.5rem 0;
+        color: gray;
+    }
+
+    p {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+    }
+
+    button {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        color: #ffffff;
+        background-color: sysColors.$primary-color;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        &:hover 
+       {
+            background-color: sysColors.$secondary-color;
+        }
+    }
+}

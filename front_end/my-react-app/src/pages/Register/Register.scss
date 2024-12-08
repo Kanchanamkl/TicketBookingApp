@@ -1,0 +1,151 @@
+@use "../../colors/colors.scss" as colors;
+
+.form-background {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url("../../assets/Images/playerbg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    .form-warp {
+        width: 600px;
+        margin-left: 120px;
+        background-color: colors.$form-bgcolor;
+        border-radius: 20px;
+        color: colors.$primary-font-color;
+        padding: 20px 40px;
+        border: 2px solid colors.$secondary-color;
+        margin-top: 120px;
+        margin-bottom: 100px;
+        color: colors.$primary-font-color;
+
+        .form-heading {
+            font-size: 45px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .form-input-box {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            margin: 30px 0;
+            color: colors.$secondary-color;
+
+            .form-input {
+                width: 100%;
+                height: 100%;
+                outline: none;
+                background-color: #ffffff65;
+                border-radius: 40px;
+                padding: 20px 45px 20px 20px;
+                border: 2px solid colors.$secondary-color;
+            }
+
+            .form-input::placeholder {
+                color: colors.$secondary-color;
+                font-size: 17px;
+            }
+
+            #type {
+                padding: 0 20px 0 15px;
+                font-size: 17px;
+            }
+        }
+
+        .file-input-box {
+            display: flex;
+            flex-direction: column;
+            color: colors.$primary-font-color;
+            margin-left: 15px;
+
+            .file-input[type="file"] {
+                font-size: 16px;
+            }
+            .file-input::-webkit-file-upload-button {
+                background-color: green;
+                color: colors.$primary-font-color;
+                padding: 6px;
+                margin-right: 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .pro-pic {
+                color: colors.$primary-font-color;
+                font-weight: 500;
+                font-size: 17px;
+                margin-bottom: 15px;
+            }
+        }
+        .reg-button {
+            margin-top: 45px;
+            margin-bottom: 10px;
+
+            .register {
+                width: 40%;
+                height: 45px;
+                background: rgb(254, 237, 0);
+                color: colors.$secondary-color;
+                outline: none;
+                border-radius: 40px;
+                cursor: pointer;
+                font-size: 17px;
+                font-weight: 700;
+                border: 2px solid colors.$secondary-color;
+            }
+
+            .cancel {
+                width: 40%;
+                height: 45px;
+                background: transparent;
+                color: colors.$primary-font-color;
+                outline: none;
+                border-radius: 40px;
+                cursor: pointer;
+                font-size: 17px;
+                font-weight: 700;
+                border: 2px solid colors.$primary-font-color;
+                margin-left: 85px;
+            }
+        }
+
+        .loading-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+
+            .loader {
+                border: 16px solid #f3f3f3;
+                border-top: 16px solid colors.$primary-color;
+                border-radius: 50%;
+                width: 120px;
+                height: 120px;
+                animation: spin 2s linear infinite;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
+}
+
+            @keyframes spin {
+                0% {
+                    transform: rotate(0deg);
+                }
+                100% {
+                    transform: rotate(360deg);
+                }
+            }
+        }
+    }
+}

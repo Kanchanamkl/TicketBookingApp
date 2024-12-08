@@ -1,0 +1,24 @@
+@use "../../../colors/colors.scss" as colors;
+
+.court-booking-container {
+    width: 100%;
+    height: 100%;
+    padding-top:85px;
+    padding-left: 80px;
+    padding-right: 80px;
+    background: url("../../../assets/images/blue_abstract.jpg");
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  
+    .court-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap:20px;
+      justify-content: center; 
+      align-items: center;
+      padding-top: 5px;
+    }
+  }
