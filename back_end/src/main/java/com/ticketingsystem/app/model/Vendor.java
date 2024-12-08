@@ -1,20 +1,27 @@
 package com.ticketingsystem.app.model;
 import com.ticketingsystem.app.enums.TICKET_STATUS;
+import com.ticketingsystem.app.repository.EventRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vendor extends User implements Runnable {
     private long vendorId;
     private Event event;
     private int ticketCount;
     private TicketPool ticketPool;
+    private EventRepository eventRepository;
 
-    public Vendor(Long vendorId, Event event, int ticketCount , TicketPool ticketPool) {
+    public Vendor(Long vendorId, Event event, int ticketCount , TicketPool ticketPool ,EventRepository eventRepository) {
         this.event = event;
         this.vendorId = vendorId;
         this.ticketCount = ticketCount;
         this.ticketPool=ticketPool;
+        this.eventRepository=eventRepository;
     }
 
 
@@ -22,8 +29,9 @@ public class Vendor extends User implements Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                if (event.isProducingTickets()) {
-                    Ticket ticket = new Ticket(TICKET_STATUS.UNSOLD);
+                Event event_ = fetchUpdatedEvent(event.getEventId());
+                if (event_.isProducingTickets()) {
+                    Ticket ticket = new Ticket(event_,TICKET_STATUS.UNSOLD);
 
                     ticketPool.addTicket(ticket);
                     System.out.println("Vendor " + vendorId + " is producing tickets for event " + event.getEventId());
@@ -35,5 +43,11 @@ public class Vendor extends User implements Runnable {
         } catch (InterruptedException e) {
             System.out.println("Vendor " + vendorId + " interrupted.");
         }
+    }
+
+
+    private Event fetchUpdatedEvent(long eventId) {
+        return eventRepository.findById(eventId).orElse(null);
+
     }
 }

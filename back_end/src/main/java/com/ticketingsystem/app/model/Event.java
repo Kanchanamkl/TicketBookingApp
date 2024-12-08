@@ -22,8 +22,9 @@ public class Event {
     private LocalDate eventDate;
     private LocalTime eventTime;
     private int totalTickets;
+    private String location;
     private boolean isProducingTickets;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;;
+    private List<Ticket> tickets;
 }

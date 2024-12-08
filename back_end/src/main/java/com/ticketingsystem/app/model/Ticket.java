@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "TICKET")
+@Table(name = "ticket")
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +21,20 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TICKET_STATUS status;
 
-    Ticket(TICKET_STATUS status) {
+    Ticket(Event event ,TICKET_STATUS status) {
         this.status = status;
+        this.event = event;
     }
 
     @ManyToOne
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    @ManyToOne
+    @JoinColumn(name = "vendor_id", nullable = false)
+    private User vendor;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private User customer;
 }

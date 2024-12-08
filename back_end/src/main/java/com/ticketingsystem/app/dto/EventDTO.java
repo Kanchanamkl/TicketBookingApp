@@ -16,7 +16,8 @@ public class EventDTO {
     private String eventName;
     private int ticketCount;
     private LocalDate eventDate;
-    private LocalTime localTime;
+    private LocalTime eventTime;
     private String Location;
+
 
 }

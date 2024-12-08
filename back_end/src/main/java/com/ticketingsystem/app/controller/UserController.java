@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
 
     @PostMapping("/authenticate")
@@ -62,5 +62,6 @@ public class UserController {
     public User getUserById(@RequestParam Long id){
         return userService.getUserById(id);
     }
+
 
 }

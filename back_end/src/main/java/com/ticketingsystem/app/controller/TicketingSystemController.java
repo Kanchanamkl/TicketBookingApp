@@ -40,16 +40,24 @@ public class TicketingSystemController {
 
     @PostMapping("/start_produce_tickets")
     public String startProduceTickets(@RequestParam Long vendorId, @RequestParam Long eventId , @RequestParam int ticketCount) {
-        Event event = eventRepository.findById(eventId).get();
-        User user= userRepository.findById(vendorId).get();
 
-            event.setProducingTickets(true);
-            eventRepository.save(event);
+        Event event = eventRepository.findById(eventId).orElse(null);
+        if (event == null) {
+            return "Event not found";
+        }else{
+            User user = userRepository.findById(vendorId).orElse(null);
+            if (user == null) {
+                return "User not found";
+            }else{
+                event.setProducingTickets(true);
+                eventRepository.save(event);
 
-            Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool);
-            vendor.run();
-            return "Requested Tickets are being produced.";
+                Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool , eventRepository);
+                new Thread(vendor).start();
+                return "Requested Tickets are being produced.";
+            }
 
+        }
 
     }
 

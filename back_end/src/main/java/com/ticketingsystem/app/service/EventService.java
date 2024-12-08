@@ -5,13 +5,15 @@ import com.ticketingsystem.app.dto.EventDTO;
 import com.ticketingsystem.app.model.Event;
 import com.ticketingsystem.app.model.User;
 import com.ticketingsystem.app.repository.EventRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
 @Service
+@RequiredArgsConstructor
 public class EventService {
-    private  EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
 
     public EventDTO createEvent(EventDTO eventDTO) {
@@ -19,6 +21,8 @@ public class EventService {
                 .eventName(eventDTO.getEventName())
                 .eventDate(eventDTO.getEventDate())
                 .totalTickets(eventDTO.getTicketCount())
+                .eventTime(eventDTO.getEventTime())
+                .location(eventDTO.getLocation())
                 .isProducingTickets(false)
                 .build();
        eventRepository.save(event);
