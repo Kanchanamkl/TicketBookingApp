@@ -95,21 +95,10 @@ const SideBar = () => {
                                 <Link to="/court-bookings">
                                     <MdAssignmentAdd size={20} />
                                 </Link>
-                                <span>Book a Court</span>
+                                <span>Book Tickets</span>
                             </button>
                         )}
 
-                        {role === "MEMBER" && (
-                            <button
-                                onClick={() => navigate("/coach-bookings")}
-                                className="nav-item-new-apointment"
-                            >
-                                <Link to="/coach-bookings">
-                                    <FaAddressBook size={19} />
-                                </Link>
-                                <span>Book a Coach</span>
-                            </button>
-                        )}
 
                         <li className="nav-item" onClick={handleUserIconClick}>
                             <Link onClick={toggleProfileCard}>

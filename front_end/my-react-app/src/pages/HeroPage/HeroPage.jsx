@@ -1,7 +1,6 @@
 import React from "react";
 import "./HeroPage.scss";
 import Navbar from "../../components/Navbar/Navbar";
-import bgvideo from "../../assets/images/bgvideo.mp4";
 import { useNavigate } from "react-router-dom";
 
 const HeroPage = () => {
@@ -12,34 +11,27 @@ const HeroPage = () => {
             <Navbar />
 
             <div className="hero-background">
-                <video
-                    src={bgvideo}
-                    id="bgvideo"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                />
+        
 
                 <div className="hero-content">
                     <div className="hero-heading">
-                        <h1>Cricket Pulse</h1>
+                        <h1>Ticket Studio</h1>
                     </div>
                     <div className="hero-tagline">
-                        <h3>Bringing the Game Closer to You...</h3>
+                        <h3>Bringing the Tickets to You...</h3>
                     </div>
                     <div className="hero-button-section">
                         <button
                             className="hero-button"
                             onClick={() => navigate("/coachregister")}
                         >
-                            Join as a Coach
+                            Join as Vender
                         </button>
                         <button
                             className="hero-button"
                             onClick={() => navigate("/playerregister")}
                         >
-                            Join as a player
+                            Join as Customer
                         </button>
                     </div>
                 </div>

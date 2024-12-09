@@ -21,8 +21,10 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TICKET_STATUS status;
 
-    Ticket(Event event ,TICKET_STATUS status) {
+    Ticket(Event event , User vendor , User customer,TICKET_STATUS status) {
         this.status = status;
+        this.vendor=vendor;
+        this.customer=customer;
         this.event = event;
     }
 
@@ -31,10 +33,11 @@ public class Ticket {
     private Event event;
 
     @ManyToOne
-    @JoinColumn(name = "vendor_id", nullable = false)
+    @JoinColumn(name = "vendor_id")
     private User vendor;
 
+
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = true)
     private User customer;
 }

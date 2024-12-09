@@ -1,6 +1,8 @@
 package com.ticketingsystem.app.model;
 import com.ticketingsystem.app.enums.TICKET_STATUS;
 import com.ticketingsystem.app.repository.EventRepository;
+import com.ticketingsystem.app.repository.TicketRepository;
+import com.ticketingsystem.app.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -16,18 +18,22 @@ public class Vendor extends User implements Runnable {
     private int ticketCount;
     private TicketPool ticketPool;
     private EventRepository eventRepository;
+    private UserRepository userRepository;
+    private TicketRepository ticketRepository;
     private static boolean isStop = false;
     private static long eventId=0;
     private static final Object lock = new Object();
 
 
 
-    public Vendor(Long vendorId, Event event, int ticketCount , TicketPool ticketPool ,EventRepository eventRepository) {
+    public Vendor(Long vendorId, Event event, int ticketCount , TicketPool ticketPool , EventRepository eventRepository , UserRepository userRepository, TicketRepository ticketRepository) {
         this.event = event;
         this.vendorId = vendorId;
         this.ticketCount = ticketCount;
         this.ticketPool=ticketPool;
         this.eventRepository=eventRepository;
+        this.userRepository=userRepository;
+        this.ticketRepository=ticketRepository;
     }
 
 
@@ -35,11 +41,12 @@ public class Vendor extends User implements Runnable {
     public void run() {
         try {
             while (!Thread.currentThread().isInterrupted()) {
-
+                // producing tickets to pool
                 Event event_ = fetchUpdatedEvent(event.getEventId());
+                User vendor = userRepository.findById(vendorId).orElse(null);
                 if (event_.isProducingTickets()) {
-                    Ticket ticket = new Ticket(event_,TICKET_STATUS.UNSOLD);
-
+                    Ticket ticket = new Ticket(event_,vendor,null,TICKET_STATUS.UNSOLD);
+                    ticketRepository.save(ticket);
                     ticketPool.addTicket(ticket);
                     System.out.println("Vendor " + vendorId + " is producing tickets for event " + event.getEventId());
                 }

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class TicketPool {
-    private final List<Ticket> ticketList;
+    public final List<Ticket> ticketList;
     private final int ticketPoolSize;
 
     public TicketPool( int ticketPoolSize) {
@@ -19,15 +19,14 @@ public class TicketPool {
         System.out.println(ticketList.size() + " Tickets added to the pool." );
     }
 
-    public synchronized Ticket removeTicket() {
-        if (!ticketList.isEmpty()) {
-            Ticket ticket = ticketList.remove(0);
-            System.out.println("Ticket removed from the pool.");
+    public synchronized Ticket removeTicket(Ticket ticket) {
+        if (ticketList.contains(ticket)) {
+            ticketList.remove(ticket);
             return ticket;
-        } else {
-            System.out.println("No tickets available to remove.");
-            return null;
         }
+        System.out.println("Ticket not found in the pool.");
+        return null;
+
     }
 
 
@@ -40,4 +39,18 @@ public class TicketPool {
         }
         return count;
     }
+
+    public synchronized List<Ticket> getTicketsRequestedCountByEventId(long eventId, int ticketCount) {
+        System.out.println("TicketPool getTicketsRequestedCountByEventId: " + eventId + " Ticket Count: " + ticketCount);
+        List<Ticket> tickets = new ArrayList<>();
+        for (Ticket ticket : ticketList) {
+            if (ticket.getEvent().getEventId() == eventId && ticketCount > 0) {
+                tickets.add(ticket);
+                ticketCount--;
+            }
+        }
+        return tickets;
+
+    }
+
 }

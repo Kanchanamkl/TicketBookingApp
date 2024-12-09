@@ -6,6 +6,7 @@ import com.ticketingsystem.app.dto.UserDTO;
 import com.ticketingsystem.app.enums.ROLE;
 import com.ticketingsystem.app.exception.UserAlreadyExistsException;
 import com.ticketingsystem.app.repository.EventRepository;
+import com.ticketingsystem.app.repository.TicketRepository;
 import com.ticketingsystem.app.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,11 +18,13 @@ public class AppInitializer implements CommandLineRunner {
 
     private final UserService userService;
     private final EventRepository eventRepository;
+    private final TicketRepository ticketRepository;
     private TicketPool ticketPool;
 
-    public AppInitializer(UserService userService, EventRepository eventRepository) {
+    public AppInitializer(UserService userService, EventRepository eventRepository, TicketRepository ticketRepository) {
         this.userService = userService;
         this.eventRepository = eventRepository;
+        this.ticketRepository = ticketRepository;
     }
 
     @Override
@@ -30,6 +33,7 @@ public class AppInitializer implements CommandLineRunner {
         try {
             initializeAdminUsers();
             initializeEventTicketProducingState();
+            initializeTicketTable();
 
             File configFile = new File("src/main/resources/config.json");
 
@@ -78,6 +82,10 @@ public class AppInitializer implements CommandLineRunner {
             event.setProducingTickets(false);
             eventRepository.save(event);
         });
+    }
+
+    private void initializeTicketTable(){
+        ticketRepository.deleteAll();
     }
 
 }

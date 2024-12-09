@@ -5,6 +5,7 @@ import com.ticketingsystem.app.dto.AuthenticationResDTO;
 import com.ticketingsystem.app.dto.EventDTO;
 import com.ticketingsystem.app.model.*;
 import com.ticketingsystem.app.repository.EventRepository;
+import com.ticketingsystem.app.repository.TicketRepository;
 import com.ticketingsystem.app.repository.UserRepository;
 import com.ticketingsystem.app.service.EventService;
 import com.ticketingsystem.app.service.UserService;
@@ -23,12 +24,14 @@ public class TicketingSystemController {
     private static final TicketPool ticketPool = new TicketPool(1000); // Example capacity
     private final UserService userService;
     private final UserRepository userRepository;
+    private final TicketRepository ticketRepository;
 
-    public TicketingSystemController(EventService eventService, EventRepository eventRepository, UserService userService, UserRepository userRepository) {
+    public TicketingSystemController(EventService eventService, EventRepository eventRepository, UserService userService, UserRepository userRepository, TicketRepository ticketRepository) {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.userService = userService;
         this.userRepository = userRepository;
+        this.ticketRepository = ticketRepository;
     }
 
 
@@ -57,7 +60,7 @@ public class TicketingSystemController {
                 event.setProducingTickets(true);
                 eventRepository.save(event);
 
-                Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool, eventRepository);
+                Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool, eventRepository,userRepository,ticketRepository );
                 new Thread(vendor).start();
                 return "Requested Tickets are being produced.";
             }
@@ -80,10 +83,8 @@ public class TicketingSystemController {
     public String buyTickets(@RequestParam Long customerId, @RequestParam Long eventId, @RequestParam int ticketCount) {
         Optional<Event> event = eventRepository.findById(eventId);
         if (event.isPresent()) {
-//            Customer customer = new Customer(customerId, eventId, ticketCount);
-//            Thread customerThread = new Thread(customer);
-//            customerThread.start();
-
+            Customer customer = new Customer(customerId, eventId, ticketCount ,ticketPool,1000, userRepository, ticketRepository);
+            new Thread(customer).start();
             return "Requested Tickets are being bought.";
         } else {
             return "Event not found";
