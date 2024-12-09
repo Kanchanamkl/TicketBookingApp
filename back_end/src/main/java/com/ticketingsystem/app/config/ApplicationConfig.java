@@ -1,11 +1,5 @@
 package com.ticketingsystem.app.config;
 
-/**
- * @author : Kanchana Kalansooriya
- * @since 8/15/2024
- */
-
-;
 import com.ticketingsystem.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 

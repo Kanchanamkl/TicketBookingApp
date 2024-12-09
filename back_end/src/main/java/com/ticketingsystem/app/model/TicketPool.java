@@ -16,7 +16,7 @@ public class TicketPool {
 
     public synchronized void addTicket(Ticket ticket) {
         ticketList.add(ticket);
-        System.out.println(ticketList.size() + " tickets added to the pool.->" );
+        System.out.println(ticketList.size() + " Tickets added to the pool." );
     }
 
     public synchronized Ticket removeTicket() {
@@ -30,9 +30,6 @@ public class TicketPool {
         }
     }
 
-    public synchronized int getAvailableTickets() {
-        return ticketList.size();
-    }
 
     public synchronized int getAvailableTicketsByEventId(long eventId){
         int count = 0;

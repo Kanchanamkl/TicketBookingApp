@@ -1,34 +1,36 @@
 package com.ticketingsystem.app.config.inits;
+
 import com.ticketingsystem.app.model.Configuration;
 import com.ticketingsystem.app.model.TicketPool;
 import com.ticketingsystem.app.dto.UserDTO;
 import com.ticketingsystem.app.enums.ROLE;
 import com.ticketingsystem.app.exception.UserAlreadyExistsException;
+import com.ticketingsystem.app.repository.EventRepository;
 import com.ticketingsystem.app.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
 
-/**
- * @author : Kanchana Kalansooriya
- * @since 11/12/2024
- */
-
-
 @Component
 public class AppInitializer implements CommandLineRunner {
 
     private final UserService userService;
+    private final EventRepository eventRepository;
     private TicketPool ticketPool;
-    public AppInitializer(UserService userService ) {
+
+    public AppInitializer(UserService userService, EventRepository eventRepository) {
         this.userService = userService;
+        this.eventRepository = eventRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        initializeAdminUsers();
+
         try {
+            initializeAdminUsers();
+            initializeEventTicketProducingState();
+
             File configFile = new File("src/main/resources/config.json");
 
 
@@ -36,7 +38,7 @@ public class AppInitializer implements CommandLineRunner {
                 Configuration config = Configuration.loadFromJson("src/main/resources/config.json");
                 System.out.println("Loaded configuration: " + config);
 
-                // Initialize system components
+
                 this.ticketPool = new TicketPool(config.getMaxTicketCapacity());
                 System.out.println("Ticket pool initialized with max capacity: " + config.getMaxTicketCapacity());
             } else {
@@ -71,5 +73,11 @@ public class AppInitializer implements CommandLineRunner {
         }
     }
 
+    private void initializeEventTicketProducingState(){
+        eventRepository.findAll().forEach(event -> {
+            event.setProducingTickets(false);
+            eventRepository.save(event);
+        });
+    }
 
 }

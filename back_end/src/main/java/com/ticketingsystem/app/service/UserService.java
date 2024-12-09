@@ -22,10 +22,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * @author Kanchana_m
- */
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -46,27 +42,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User updatedUser = userRepository.save(user);
 
-//        if (user.getRole().equals(ROLE.VENDOR)) {
-//            Vendor vendor = vendorRepository.findByUser(user).orElseThrow(() -> new UserNotFoundException("Vendor not found"));
-//            vendor.setFirstName(userDTO.getFirstName());
-//            vendor.setLastName(userDTO.getLastName());
-//            vendor.setPhoneNumber(userDTO.getPhoneNumber());
-//            vendor.setAddress(userDTO.getAddress());
-//            vendor.setGender(userDTO.getGender());
-//            vendor.setDob(userDTO.getDob());
-//            vendor.setProfilePic(userDTO.getProfilePic());
-//            vendorRepository.save(vendor);
-//        } else if (user.getRole().equals(ROLE.CUSTOMER)) {
-//            Customer customer = customerRepository.findByUser(user).orElseThrow(() -> new UserNotFoundException("Customer not found"));
-//            customer.setFirstName(userDTO.getFirstName());
-//            customer.setLastName(userDTO.getLastName());
-//            customer.setPhoneNumber(userDTO.getPhoneNumber());
-//            customer.setAddress(userDTO.getAddress());
-//            customer.setGender(userDTO.getGender());
-//            customer.setDob(userDTO.getDob());
-//            customer.setProfilePic(userDTO.getProfilePic());
-//            customerRepository.save(customer);
-//        }
+
 
         return updatedUser;
     }
@@ -91,31 +67,7 @@ public class UserService {
 
             userRepository.save(user);
 
-//            if (userDTO.getRole().equals(ROLE.VENDOR)) {
-//                Vendor vendor = Vendor.builder()
-//                        .user(user)
-//                        .firstName(userDTO.getFirstName())
-//                        .lastName(userDTO.getLastName())
-//                        .phoneNumber(userDTO.getPhoneNumber())
-//                        .address(userDTO.getAddress())
-//                        .gender(userDTO.getGender())
-//                        .dob(userDTO.getDob())
-//                        .profilePic(userDTO.getProfilePic())
-//                        .build();
-//                vendorRepository.save(vendor);
-//            } else if (userDTO.getRole().equals(ROLE.CUSTOMER)) {
-//                Customer customer = Customer.builder()
-//                        .user(user)
-//                        .firstName(userDTO.getFirstName())
-//                        .lastName(userDTO.getLastName())
-//                        .phoneNumber(userDTO.getPhoneNumber())
-//                        .gender(userDTO.getGender())
-//                        .address(userDTO.getAddress())
-//                        .profilePic(userDTO.getProfilePic())
-//                        .dob(userDTO.getDob())
-//                        .build();
-//                customerRepository.save(customer);
-//            }
+
         }
         return AuthenticationResDTO.builder()
                 .username(userDTO.getUsername())

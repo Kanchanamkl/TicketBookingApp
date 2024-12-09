@@ -39,20 +39,25 @@ public class TicketingSystemController {
     }
 
     @PostMapping("/start_produce_tickets")
-    public String startProduceTickets(@RequestParam Long vendorId, @RequestParam Long eventId , @RequestParam int ticketCount) {
+    public String startProduceTickets(@RequestParam Long vendorId, @RequestParam Long eventId, @RequestParam int ticketCount) {
 
         Event event = eventRepository.findById(eventId).orElse(null);
+
         if (event == null) {
             return "Event not found";
-        }else{
+        }else if(event.isProducingTickets()){
+            System.out.println("Ticket producing are bean processing for Event "+eventId + " by Vendor "+vendorId);
+            return "Ticket producing are bean processing for Event "+eventId + " by Vendor "+vendorId;
+        } else {
+            Vendor.setIsStop(false, event.getEventId());
             User user = userRepository.findById(vendorId).orElse(null);
             if (user == null) {
                 return "User not found";
-            }else{
+            } else {
                 event.setProducingTickets(true);
                 eventRepository.save(event);
 
-                Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool , eventRepository);
+                Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool, eventRepository);
                 new Thread(vendor).start();
                 return "Requested Tickets are being produced.";
             }
@@ -67,12 +72,12 @@ public class TicketingSystemController {
 
         event.setProducingTickets(false);
         eventRepository.save(event);
-
-        return "Requested Tickets are being stopped.";
+        Vendor.setIsStop(true, event.getEventId());
+        return "Requested Tickets producing are being stopped.";
     }
 
     @PostMapping("/customer/buy")
-    public String buyTickets(@RequestParam Long customerId, @RequestParam Long eventId , @RequestParam int ticketCount) {
+    public String buyTickets(@RequestParam Long customerId, @RequestParam Long eventId, @RequestParam int ticketCount) {
         Optional<Event> event = eventRepository.findById(eventId);
         if (event.isPresent()) {
 //            Customer customer = new Customer(customerId, eventId, ticketCount);

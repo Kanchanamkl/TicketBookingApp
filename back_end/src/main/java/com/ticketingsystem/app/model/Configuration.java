@@ -10,7 +10,7 @@ public class Configuration {
     private int customerRetrievalRate;
     private int maxTicketCapacity;
 
-    // Getters and Setters
+
     public int getTotalTickets() { return totalTickets; }
     public void setTotalTickets(int totalTickets) { this.totalTickets = totalTickets; }
 
@@ -23,7 +23,7 @@ public class Configuration {
     public int getMaxTicketCapacity() { return maxTicketCapacity; }
     public void setMaxTicketCapacity(int maxTicketCapacity) { this.maxTicketCapacity = maxTicketCapacity; }
 
-    // Load from JSON file
+
     public static Configuration loadFromJson(String filePath) throws IOException {
         Gson gson = new Gson();
         try (Reader reader = new FileReader(filePath)) {

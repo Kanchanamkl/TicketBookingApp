@@ -13,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author Kanchana_m
- */
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/users")

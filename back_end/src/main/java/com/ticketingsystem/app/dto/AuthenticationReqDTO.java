@@ -5,10 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * @author : Kanchana Kalansooriya
- * @since 8/17/2024
- */
+
 @Data
 @Builder
 @AllArgsConstructor

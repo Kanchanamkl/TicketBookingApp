@@ -6,10 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-/**
- * @author : Kanchana Kalansooriya
- * @since 8/17/2024
- */
 @Data
 @Builder
 @AllArgsConstructor
