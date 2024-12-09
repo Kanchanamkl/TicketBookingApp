@@ -85,6 +85,7 @@ public class TicketingSystemController {
         if (event.isPresent()) {
             Customer customer = new Customer(customerId, eventId, ticketCount ,ticketPool,1000, userRepository, ticketRepository);
             new Thread(customer).start();
+            System.out.println("Requested Tickets are being bought.");
             return "Requested Tickets are being bought.";
         } else {
             return "Event not found";

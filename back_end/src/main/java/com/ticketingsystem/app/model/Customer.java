@@ -33,7 +33,7 @@ public class Customer extends User implements Runnable {
                 List<Ticket> openToBuyTickets = ticketPool.getTicketsRequestedCountByEventId(eventId, ticketCount);
                 if(openToBuyTickets.isEmpty()){
                     System.out.println( " could not find any tickets for event " + eventId);
-//                    Thread.currentThread().interrupt();
+
                 }else{
                     for (Ticket ticket : openToBuyTickets) {
                         ticket.setCustomer(userRepository.findById(customerId).orElse(null));
@@ -42,11 +42,13 @@ public class Customer extends User implements Runnable {
                         System.out.print("Customer " + customerId + " bought ticket " + ticket.getTicketId()+ " for event " + eventId + " | ");
                         ticketPool.removeTicket(ticket);
                         System.out.println( " Ticket" + ticket.getTicketId() + " removed from the pool.");
+                        Thread.sleep(retrievalInterval);
                     }
-//                    Thread.currentThread().interrupt();
+
                 }
+
                 Thread.currentThread().interrupt();
-                Thread.sleep(retrievalInterval);
+
             }
         } catch (InterruptedException e) {
             System.out.println("Customer " + customerId + " interrupted.");
