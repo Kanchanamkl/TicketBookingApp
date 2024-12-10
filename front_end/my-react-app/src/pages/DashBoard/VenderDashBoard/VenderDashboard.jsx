@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Bar, Line, Pie } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
     BarElement,
@@ -8,14 +8,11 @@ import {
     Title,
     Tooltip,
     Legend,
-    ArcElement,
-    PointElement,
-    LineElement,
 } from "chart.js";
 import "./VenderDashboardStyles.scss";
 import SectionContainer from "../../../components/SectionContainer/SectionContainer";
-import Table from "../../../components/Table/Table";
 import { StoreContext } from "../../../StoreContext/StoreContext";
+import axios from "axios";
 
 // Register necessary Chart.js components
 ChartJS.register(
@@ -24,26 +21,42 @@ ChartJS.register(
     LinearScale,
     Title,
     Tooltip,
-    Legend,
-    ArcElement,
-    PointElement,
-    LineElement
+    Legend
 );
 
-const vendorDashboard = () => {
-    const revenueData = {
-        labels: [
-            "January", "February", "March", "April", "May", "June", 
-            "July", "August", "September", "October", "November", "December"
-        ],
+const VendorDashboard = () => {
+    const { userId } = useContext(StoreContext);
+    const [revenueData, setRevenueData] = useState({
+        labels: [],
         datasets: [
             {
-                label: "Revenue",
-                data: [1200, 1500, 1100, 1800, 1700, 1600, 1900, 2000, 2100, 2200, 2300, 2400],
+                label: "Sold Tickets",
+                data: [],
                 backgroundColor: "rgba(54, 162, 235, 0.6)",
             },
         ],
-    };
+    });
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            axios.get(`http://localhost:8081/api/ticketing/sold_ticket_count?vendorId=${userId}`)
+                .then((response) => {
+                    const soldCount = response.data;
+                    console.log("Sold ticket count:", soldCount);
+                    const currentTime = new Date().toLocaleTimeString();
+                    setRevenueData((prevData) => {
+                        const updatedData = { ...prevData };
+                        updatedData.labels = [...updatedData.labels, currentTime];
+                        updatedData.datasets[0].data = [...updatedData.datasets[0].data, soldCount];
+                        console.log("Updated data:", updatedData);
+                        return updatedData;
+                    });
+                })
+                .catch((error) => console.error("Error fetching sold ticket count data:", error));
+        }, 60000);
+
+        return () => clearInterval(interval);
+    }, [userId]);
 
     return (
         <div className="vendor-dashboard-container">
@@ -51,7 +64,7 @@ const vendorDashboard = () => {
                 <div className="dashboard-container">
                     <div className="dashboard-content">
                         <section className="dashboard-section">
-                            <h2>Ticket Selling </h2>
+                            <h2>Ticket Selling</h2>
                             <Bar data={revenueData} />
                         </section>
                     </div>
@@ -61,4 +74,4 @@ const vendorDashboard = () => {
     );
 };
 
-export default vendorDashboard;
+export default VendorDashboard;

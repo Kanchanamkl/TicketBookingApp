@@ -53,7 +53,7 @@ function App() {
           <>
             <SideBar />
             <Routes>
-              <Route path="/" element={<VenderDashboard />} />
+              <Route path="/" element={<EventPage />} />
               <Route path="/dashboard" element={<VenderDashboard />} />
               <Route path="/events" element={<EventPage />} />
               <Route path="*" element={<EventPage />} />

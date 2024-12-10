@@ -14,6 +14,7 @@ const EventPage = () => {
     eventTime: "",
     totalTickets: "",
     location: "",
+    ticketReleaseRate: "",
   });
   const [producingTickets, setProducingTickets] = useState({});
 
@@ -56,6 +57,7 @@ const EventPage = () => {
           eventTime: "",
           totalTickets: "",
           location: "",
+          ticketReleaseRate:""
         });
       })
       .catch((error) => console.error("Error creating event:", error));
@@ -230,6 +232,7 @@ const EventPage = () => {
             )}
 
             {userRole === "VENDOR" && (
+              <><p>Ticket Release Rate: {event.ticketReleaseRate} ms</p>
               <div className="vendor-actions">
                 <button
                   onClick={() => handleStartProduceTickets(event.eventId)}
@@ -243,7 +246,7 @@ const EventPage = () => {
                 >
                   Stop Produce Tickets
                 </button>
-              </div>
+              </div></>
             )}
           </div>
         ))}
