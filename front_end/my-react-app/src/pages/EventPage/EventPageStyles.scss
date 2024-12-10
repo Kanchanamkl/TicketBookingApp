@@ -53,6 +53,17 @@
         border-radius: 5px;
         width: calc(33.333% - 20px);
         background-color: #aad3ee;
+
+
+        input{
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+
+        }
   
         .vendor-actions {
           display: flex;
@@ -68,7 +79,7 @@
             cursor: pointer;
   
             &:disabled {
-              background-color: #cccccc;
+              background-color: #888585;
               cursor: not-allowed;
             }
   

@@ -61,9 +61,33 @@ const EventPage = () => {
       .catch((error) => console.error("Error creating event:", error));
   };
 
-  const handlePurchaseTicket = (eventId) => {
-   
-    console.log(`Purchasing ticket for event ID: ${eventId}`);
+  const handlePurchaseTicket = (eventId , ticketCount) => {
+  if (!window.confirm("Are you sure you want to purchase these tickets?")) {
+    return;
+  }
+  axios
+    .post(`http://localhost:8081/api/ticketing/customer/buy?customerId=${userId}&eventId=${eventId}&ticketCount=${ticketCount}`)
+    .then((response) => {
+      console.log("Ticket purchased successfully:", response.data);
+      setTimeout(() => {
+        axios
+          .get("http://localhost:8081/api/ticketing/events")
+          .then((response) => {
+            if (Array.isArray(response.data)) {
+              setEvents(response.data);
+            } else {
+              console.error("Error: Expected an array of events");
+            }
+          })
+          .catch((error) => console.error("Error fetching events:", error));
+      }, 2000);
+      setProducingTickets((prevState) => ({
+        ...prevState,
+        [eventId]: "",
+      }));
+    })
+    .catch((error) => console.error("Error purchasing ticket:", error));
+  console.log(`Purchasing ticket for event ID: ${eventId}`);
   };
 
   const handleStartProduceTickets = (eventId) => {
@@ -176,10 +200,33 @@ const EventPage = () => {
             <p>Date : {event.eventDate} </p>
             <p>City : {event.location}</p>
             <p>Tickets Available: {event.totalTickets}</p>
+
             {userRole === "CUSTOMER" && (
-              <button onClick={() => handlePurchaseTicket(event.eventId)}>
-                Purchase Ticket
-              </button>
+              <div>
+                <input
+                  type="number"
+                  placeholder="Number of Tickets"
+                  value={producingTickets[event.eventId] || ""}
+                  onChange={(e) =>
+                    setProducingTickets((prevState) => ({
+                      ...prevState,
+                      [event.eventId]: e.target.value,
+                    }))
+                  }
+                />
+                <button
+                  onClick={() => {
+                    const ticketCount = parseInt(producingTickets[event.eventId], 10);
+                    if (ticketCount > 0 && ticketCount <= event.totalTickets) {
+                      handlePurchaseTicket(event.eventId , ticketCount);
+                    } else {
+                      alert("Selected ticket count exceeds the available tickets. Please select lesser ticket count");
+                    }
+                  }}
+                >
+                  Purchase Ticket
+                </button>
+              </div>
             )}
 
             {userRole === "VENDOR" && (

@@ -88,17 +88,7 @@ const SideBar = () => {
                         <FaBars onClick={showSidebar} />
                     </Link>
                     <div className="nav-bar-right">
-                        {/* {role === "CUSTOMER" && (
-                            <button
-                                onClick={() => navigate("/court-bookings")}
-                                className="nav-item-new-apointment"
-                            >
-                                <Link to="/court-bookings">
-                                    <MdAssignmentAdd size={20} />
-                                </Link>
-                                <span>Book Tickets</span>
-                            </button>
-                        )} */}
+      
 
                         <li className="nav-item" onClick={handleUserIconClick}>
                             <Link onClick={toggleProfileCard}>
@@ -148,7 +138,7 @@ const SideBar = () => {
                                     <>
                                         <li className="side-item">
                                             <Link to="/events">
-                                                <FaHome size={20} />
+                                            <FaAddressBook size={19} />
                                                 <span> Events </span>
                                             </Link>
                                         </li>
