@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileReader;
+import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*")
@@ -35,10 +36,16 @@ public class TicketingSystemController {
     }
 
 
-    @PostMapping("/event")
+    @PostMapping("/create_event")
     public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) {
         return ResponseEntity.ok(eventService.createEvent(eventDTO));
 
+    }
+
+    @GetMapping("/events")
+    public ResponseEntity<List<Event>> getAllEvents() {
+        List<Event> events = eventRepository.findAll();
+        return ResponseEntity.ok(events);
     }
 
     @PostMapping("/start_produce_tickets")
@@ -83,7 +90,7 @@ public class TicketingSystemController {
     public String buyTickets(@RequestParam Long customerId, @RequestParam Long eventId, @RequestParam int ticketCount) {
         Optional<Event> event = eventRepository.findById(eventId);
         if (event.isPresent()) {
-            Customer customer = new Customer(customerId, eventId, ticketCount ,ticketPool,1000, userRepository, ticketRepository);
+            Customer customer = new Customer(customerId, eventId, ticketCount ,ticketPool,1000, userRepository, ticketRepository, eventRepository);
             new Thread(customer).start();
             System.out.println("Requested Tickets are being bought.");
             return "Requested Tickets are being bought.";

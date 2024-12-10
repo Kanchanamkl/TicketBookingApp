@@ -15,8 +15,9 @@ public class Customer extends User implements Runnable {
     private final int retrievalInterval;
     private  TicketRepository ticketRepository;
     private UserRepository userRepository;
+    private EventRepository eventRepository;
 
-    public Customer(long customerId, long eventId ,int ticketCount,TicketPool ticketPool, int retrievalInterval ,UserRepository userRepository,TicketRepository ticketRepository) {
+    public Customer(long customerId, long eventId ,int ticketCount,TicketPool ticketPool, int retrievalInterval ,UserRepository userRepository,TicketRepository ticketRepository, EventRepository eventRepository) {
         this.customerId = customerId;
         this.eventId = eventId;
         this.ticketCount = ticketCount;
@@ -24,6 +25,7 @@ public class Customer extends User implements Runnable {
         this.retrievalInterval = retrievalInterval;
         this.userRepository= userRepository;
         this.ticketRepository= ticketRepository;
+        this.eventRepository= eventRepository;
     }
 
     @Override
@@ -31,6 +33,7 @@ public class Customer extends User implements Runnable {
         try {
             while (!Thread.currentThread().isInterrupted()) {
                 List<Ticket> openToBuyTickets = ticketPool.getTicketsRequestedCountByEventId(eventId, ticketCount);
+                Event event = eventRepository.findById(eventId).orElse(null);
                 if(openToBuyTickets.isEmpty()){
                     System.out.println( " could not find any tickets for event " + eventId);
 
@@ -39,6 +42,10 @@ public class Customer extends User implements Runnable {
                         ticket.setCustomer(userRepository.findById(customerId).orElse(null));
                         ticket.setStatus(TICKET_STATUS.SOLD);
                         ticketRepository.save(ticket);
+
+                        event.setTotalTickets(event.getTotalTickets() - 1);
+                        eventRepository.save(event);
+
                         System.out.print("Customer " + customerId + " bought ticket " + ticket.getTicketId()+ " for event " + eventId + " | ");
                         ticketPool.removeTicket(ticket);
                         System.out.println( " Ticket" + ticket.getTicketId() + " removed from the pool.");

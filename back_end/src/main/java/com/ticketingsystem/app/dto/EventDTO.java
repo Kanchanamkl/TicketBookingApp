@@ -14,10 +14,11 @@ import java.time.LocalTime;
 @Builder
 public class EventDTO {
     private String eventName;
-    private int ticketCount;
+    private int totalTickets;
+    private int maxTicketCount;
     private LocalDate eventDate;
     private LocalTime eventTime;
-    private String Location;
+    private String location;
 
 
 }

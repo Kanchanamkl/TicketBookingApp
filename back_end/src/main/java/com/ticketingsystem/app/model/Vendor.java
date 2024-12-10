@@ -48,6 +48,10 @@ public class Vendor extends User implements Runnable {
                     Ticket ticket = new Ticket(event_,vendor,null,TICKET_STATUS.UNSOLD);
                     ticketRepository.save(ticket);
                     ticketPool.addTicket(ticket);
+
+                    event_.setTotalTickets(event_.getTotalTickets() + 1);
+                    eventRepository.save(event_);
+
                     System.out.println("Vendor " + vendorId + " is producing tickets for event " + event.getEventId());
                 }
                 Thread.sleep(1000);

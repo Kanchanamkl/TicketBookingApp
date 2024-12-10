@@ -22,6 +22,5 @@ public class UserDTO {
     private String gender;
     private String nic;
     private LocalDate dob;
-    private String profilePic;
     private String specialize;
 }
