@@ -21,7 +21,6 @@ function LoginPage() {
         setRole,
         setUsername,
         setLastName,
-        setProfilePic,
     } = useContext(StoreContext);
 
     const handleSubmit = async (event) => {
@@ -29,7 +28,7 @@ function LoginPage() {
 
         try {
             const response = await axios.post(
-                "http://localhost:8080/api/users/authenticate",
+                "http://localhost:8081/api/users/authenticate",
                 {
                     email: email,
                     password: password,
@@ -54,7 +53,6 @@ function LoginPage() {
                 setLastName(lastName);
                 setUsername(username);
                 setRole(role);
-                setProfilePic(response.data.profilePic);
                 setIsLoggedIn(true);
                 navigate("/dashboard");
             } else {

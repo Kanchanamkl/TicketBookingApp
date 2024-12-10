@@ -14,10 +14,11 @@ const UserPage = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/users/get_users"
+          "http://localhost:8081/api/users/get_users"
         );
-        setUsers(response.data);
-        setFilteredUsers(response.data);
+        const nonAdminUsers = response.data.filter(user => user.role !== "ADMIN");
+        setUsers(nonAdminUsers);
+        setFilteredUsers(nonAdminUsers);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
@@ -53,7 +54,7 @@ const UserPage = () => {
       if (result.isConfirmed) {
         try {
           await axios.delete(
-            `http://localhost:8080/api/users/delete-user?id=${userId}`
+            `http://localhost:8081/api/users/delete-user?id=${userId}`
           );
           setUsers(users.filter((user) => user.userId !== userId));
           setFilteredUsers(
@@ -82,7 +83,6 @@ const UserPage = () => {
 
   const tableHeaders = [
     "ID",
-    "Profile Image",
     "First Name",
     "Last Name",
     "Username",
@@ -93,13 +93,6 @@ const UserPage = () => {
 
   const tableBody = filteredUsers.map((user) => ({
     id: user.userId,
-    profileImage: (
-      <img
-        src={user.profilePic}
-        alt="Profile"
-        style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-      />
-    ),
     firstName: user.firstName,
     lastName: user.lastName,
     Username: user.username,
@@ -177,8 +170,8 @@ const UserPage = () => {
       <h1>Admin User Page</h1>
       <div className="filters">
         <button onClick={() => handleFilterChange("ALL")}>ALL</button>
-        <button onClick={() => handleFilterChange("COACH")}>COACHES</button>
-        <button onClick={() => handleFilterChange("MEMBER")}>MEMBERS</button>
+        <button onClick={() => handleFilterChange("VENDOR")}>VENDORS</button>
+        <button onClick={() => handleFilterChange("CUSTOMER")}>CUSTOMERS</button>
       </div>
 
 

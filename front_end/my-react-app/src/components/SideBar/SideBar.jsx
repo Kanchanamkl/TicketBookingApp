@@ -24,6 +24,7 @@ import { FaUsers } from "react-icons/fa6";
 import Swal from "sweetalert2";
 import "./SideBarStyles.scss";
 import UserProfileCard from "../../components/ProfileCard/ProfileCard";
+import profileIcon from "../../assets/images/profile_icon.png";
 
 const SideBar = () => {
     const {
@@ -87,7 +88,7 @@ const SideBar = () => {
                         <FaBars onClick={showSidebar} />
                     </Link>
                     <div className="nav-bar-right">
-                        {role === "MEMBER" && (
+                        {/* {role === "CUSTOMER" && (
                             <button
                                 onClick={() => navigate("/court-bookings")}
                                 className="nav-item-new-apointment"
@@ -97,15 +98,14 @@ const SideBar = () => {
                                 </Link>
                                 <span>Book Tickets</span>
                             </button>
-                        )}
-
+                        )} */}
 
                         <li className="nav-item" onClick={handleUserIconClick}>
                             <Link onClick={toggleProfileCard}>
                                 <FaUser />
                                 {showProfileCard && (
                                     <UserProfileCard
-                                        profile_icon={profilePic}
+                                        profile_icon={profileIcon}
                                         name={`${firstName} ${lastName}`}
                                         role={role}
                                         onClose={() =>
@@ -128,83 +128,40 @@ const SideBar = () => {
 
                         {isLoggedIn && (
                             <>
-                                {role === "COACH" && (
+                                {role === "VENDOR" && (
                                     <>
                                         <li className="side-item">
                                             <Link to="/dashboard">
                                                 <FaHome />
-                                                <span> Dashboard </span>
-                                            </Link>
-                                        </li>
-
-                                        <li className="side-item">
-                                            <Link to="/sessions">
-                                                <PiCricketFill size={20} />
-                                                <span> All Sessions</span>
+                                                <span> Home </span>
                                             </Link>
                                         </li>
                                         <li className="side-item">
-                                            <Link to="/profile">
-                                                <FaUserCircle />
-                                                <span>Profile </span>
+                                            <Link to="/events">
+                                                <FaHome />
+                                                <span> Events </span>
                                             </Link>
                                         </li>
                                     </>
                                 )}
-                                {role === "MEMBER" && (
+                                {role === "CUSTOMER" && (
                                     <>
                                         <li className="side-item">
-                                            <Link to="/dashboard">
+                                            <Link to="/events">
                                                 <FaHome size={20} />
-                                                <span> Dashboard </span>
+                                                <span> Events </span>
                                             </Link>
                                         </li>
 
-                                        <li className="side-item">
-                                            <Link to="/member-court-booking-details">
-                                                <MdAssignmentAdd size={20} />
-                                                <span>Court Bookings</span>
-                                            </Link>
-                                        </li>
-                                        <li className="side-item">
-                                            <Link to="/member-coach-booking-details">
-                                                <MdSportsCricket size={20} />
-                                                <span>Coach Bookings</span>
-                                            </Link>
-                                        </li>
-                                        <li className="side-item">
-                                            <Link to="/profile">
-                                                <FaUserCircle size={20} />
-                                                <span>Profile </span>
-                                            </Link>
-                                        </li>
+
                                     </>
                                 )}
                                 {role === "ADMIN" && (
                                     <>
                                         <li className="side-item">
-                                            <Link to="/dashboard">
-                                                <FaHome />
-                                                <span> Dashboard </span>
-                                            </Link>
-                                        </li>
-
-                                        <li className="side-item">
-                                            <Link to="/admin-coach-bookings">
-                                                <PiCricketFill size={20} />
-                                                <span>Coach Bookings</span>
-                                            </Link>
-                                        </li>
-                                        <li className="side-item">
-                                            <Link to="/admin-court-booking">
-                                                <FaAddressBook />
-                                                <span>Court Bookings</span>
-                                            </Link>
-                                        </li>
-                                        <li className="side-item">
                                             <Link to="/users">
-                                                <FaUsers />
-                                                <span>Users</span>
+                                                <FaHome />
+                                                <span> Users </span>
                                             </Link>
                                         </li>
                                     </>

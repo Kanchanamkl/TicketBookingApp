@@ -15,7 +15,7 @@ const HeroPage = () => {
 
                 <div className="hero-content">
                     <div className="hero-heading">
-                        <h1>Ticket Studio</h1>
+                        <h1>TicketStudio</h1>
                     </div>
                     <div className="hero-tagline">
                         <h3>Bringing the Tickets to You...</h3>
@@ -23,13 +23,13 @@ const HeroPage = () => {
                     <div className="hero-button-section">
                         <button
                             className="hero-button"
-                            onClick={() => navigate("/coachregister")}
+                            onClick={() => navigate("/venderregister")}
                         >
                             Join as Vender
                         </button>
                         <button
                             className="hero-button"
-                            onClick={() => navigate("/playerregister")}
+                            onClick={() => navigate("/customerregister")}
                         >
                             Join as Customer
                         </button>
