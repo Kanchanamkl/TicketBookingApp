@@ -23,6 +23,7 @@ public class EventService {
                 .maxTicketCount(eventDTO.getMaxTicketCount())
                 .eventTime(eventDTO.getEventTime())
                 .location(eventDTO.getLocation())
+                .ticketReleaseRate(eventDTO.getTicketReleaseRate())
                 .isProducingTickets(false)
                 .build();
        eventRepository.save(event);

@@ -34,6 +34,7 @@ public class AppInitializer implements CommandLineRunner {
             initializeAdminUsers();
             initializeEventTicketProducingState();
             initializeTicketTable();
+            initializeEventTable();
 
             File configFile = new File("src/main/resources/config.json");
 
@@ -85,6 +86,15 @@ public class AppInitializer implements CommandLineRunner {
 
     private void initializeTicketTable(){
         ticketRepository.deleteAll();
+    }
+
+    private void initializeEventTable(){
+
+    eventRepository.findAll().forEach(event -> {
+        event.setTotalTickets(0);
+        eventRepository.save(event);
+    });
+
     }
 
 }

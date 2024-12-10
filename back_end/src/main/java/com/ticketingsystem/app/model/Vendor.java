@@ -54,7 +54,7 @@ public class Vendor extends User implements Runnable {
 
                     System.out.println("Vendor " + vendorId + " is producing tickets for event " + event.getEventId());
                 }
-                Thread.sleep(1000);
+                Thread.sleep(event_.getTicketReleaseRate());
                 synchronized (lock) {
                     while (isStop && eventId == event.getEventId()) {
                         event_.setProducingTickets(false);

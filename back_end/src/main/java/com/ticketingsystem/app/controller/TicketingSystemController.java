@@ -3,6 +3,7 @@ package com.ticketingsystem.app.controller;
 import com.google.gson.Gson;
 import com.ticketingsystem.app.dto.AuthenticationResDTO;
 import com.ticketingsystem.app.dto.EventDTO;
+import com.ticketingsystem.app.enums.TICKET_STATUS;
 import com.ticketingsystem.app.model.*;
 import com.ticketingsystem.app.repository.EventRepository;
 import com.ticketingsystem.app.repository.TicketRepository;
@@ -109,4 +110,11 @@ public class TicketingSystemController {
         int ticketCount = ticketPool.getAvailableTicketsByEventId(eventId);
         return ResponseEntity.ok(ticketCount);
     }
+
+    @GetMapping("/sold_ticket_count")
+    public ResponseEntity<Long> getUnsoldTicketCount() {
+        long unsoldTicketCount = ticketRepository.countByStatus(TICKET_STATUS.SOLD);
+        return ResponseEntity.ok(unsoldTicketCount);
+    }
+
 }
