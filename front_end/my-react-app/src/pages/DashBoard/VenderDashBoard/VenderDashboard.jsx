@@ -39,21 +39,41 @@ const VendorDashboard = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            axios.get(`http://localhost:8081/api/ticketing/sold_ticket_count?vendorId=${userId}`)
+            axios.get(`http://localhost:8081/api/ticketing/sold_ticket_count`)
                 .then((response) => {
                     const soldCount = response.data;
                     console.log("Sold ticket count:", soldCount);
-                    const currentTime = new Date().toLocaleTimeString();
+                    const currentTime = new Date();
+                    const currentMinute = `${currentTime.getHours()}:${currentTime.getMinutes()}`;
+
                     setRevenueData((prevData) => {
                         const updatedData = { ...prevData };
-                        updatedData.labels = [...updatedData.labels, currentTime];
-                        updatedData.datasets[0].data = [...updatedData.datasets[0].data, soldCount];
-                        console.log("Updated data:", updatedData);
+                        const lastLabel = updatedData.labels[updatedData.labels.length - 1];
+
+                        if (lastLabel === currentMinute) {
+                            // Update the last data point
+                            updatedData.datasets[0].data[updatedData.datasets[0].data.length - 1] += soldCount;
+                        } else {
+                            // Add a new data point
+                            updatedData.labels.push(currentMinute);
+                            updatedData.datasets[0].data.push(soldCount);
+                        }
+
+                        // Filter data to only include entries from the past hour
+                        const oneHourAgo = new Date(currentTime.getTime() - 60 * 60 * 1000);
+                        updatedData.labels = updatedData.labels.filter((time, index) => {
+                            const [hours, minutes] = time.split(":").map(Number);
+                            const timeDate = new Date(currentTime);
+                            timeDate.setHours(hours, minutes, 0, 0);
+                            return timeDate >= oneHourAgo;
+                        });
+                        updatedData.datasets[0].data = updatedData.datasets[0].data.slice(-updatedData.labels.length);
+
                         return updatedData;
                     });
                 })
                 .catch((error) => console.error("Error fetching sold ticket count data:", error));
-        }, 60000);
+        }, 2000);
 
         return () => clearInterval(interval);
     }, [userId]);
