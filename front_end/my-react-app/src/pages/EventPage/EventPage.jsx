@@ -4,7 +4,7 @@ import "./EventPageStyles.scss";
 import { StoreContext } from "../../StoreContext/StoreContext";
 
 const EventPage = () => {
-  const { role } = useContext(StoreContext);
+  const { role, userId } = useContext(StoreContext);
   const userRole = role;
 
   const [events, setEvents] = useState([]);
@@ -21,7 +21,13 @@ const EventPage = () => {
     // Fetch events from the database
     axios
       .get("http://localhost:8081/api/ticketing/events")
-      .then((response) => setEvents(response.data))
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setEvents(response.data);
+        } else {
+          console.error("Error: Expected an array of events");
+        }
+      })
       .catch((error) => console.error("Error fetching events:", error));
   }, []);
 
@@ -34,7 +40,16 @@ const EventPage = () => {
     axios
       .post("http://localhost:8081/api/ticketing/create_event", newEvent)
       .then((response) => {
-        setEvents([...events, response.data]);
+        axios
+          .get("http://localhost:8081/api/ticketing/events")
+          .then((response) => {
+            if (Array.isArray(response.data)) {
+              setEvents(response.data);
+            } else {
+              console.error("Error: Expected an array of events");
+            }
+          })
+          .catch((error) => console.error("Error fetching events:", error));
         setNewEvent({
           eventName: "",
           eventDate: "",
@@ -47,18 +62,47 @@ const EventPage = () => {
   };
 
   const handlePurchaseTicket = (eventId) => {
-    // Handle ticket purchase logic here
+   
     console.log(`Purchasing ticket for event ID: ${eventId}`);
   };
 
   const handleStartProduceTickets = (eventId) => {
-   alert(`Start producing tickets for event ID: ${eventId}`);
-    console.log(`Start producing tickets for event ID: ${eventId}`);
+    if (!window.confirm("Are you sure you want to start producing tickets for this event?")) {
+      return;
+    }
+    setProducingTickets((prevState) => ({
+      ...prevState,
+      [eventId]: true,
+    }));
+    axios
+      .post(`http://localhost:8081/api/ticketing/start_produce_tickets?vendorId=${userId}&eventId=${eventId}&ticketCount=${100}`)
+      .then((response) => {
+        console.log("Started producing tickets:", response.data);
+      })
+      .catch((error) => console.error("Error starting ticket production:", error));
   };
 
   const handleStopProduceTickets = (eventId) => {
-    alert(`Stop producing tickets for event ID: ${eventId}`);
-    console.log(`Stop producing tickets for event ID: ${eventId}`);
+    setProducingTickets((prevState) => ({
+      ...prevState,
+      [eventId]: false,
+    }));
+    axios
+      .post(`http://localhost:8081/api/ticketing/stop_produce_tickets?vendorId=${userId}&eventId=${eventId}`)
+      .then((response) => {
+        console.log("Stopped producing tickets:", response.data);
+        axios
+          .get("http://localhost:8081/api/ticketing/events")
+          .then((response) => {
+            if (Array.isArray(response.data)) {
+              setEvents(response.data);
+            } else {
+              console.error("Error: Expected an array of events");
+            }
+          })
+          .catch((error) => console.error("Error fetching events:", error));
+      })
+      .catch((error) => console.error("Error stopping ticket production:", error));
   };
 
   const validateFields = () => {
@@ -96,8 +140,15 @@ const EventPage = () => {
           <input
             type="number"
             name="totalTickets"
-            placeholder="Ticket Count"
+            placeholder="Max Ticket Count"
             value={newEvent.totalTickets}
+            onChange={handleInputChange}
+          />
+          <input
+            type="number"
+            name="ticketReleaseRate"
+            placeholder="Ticket Release Rate (ms)"
+            value={newEvent.ticketReleaseRate}
             onChange={handleInputChange}
           />
           <input
@@ -123,7 +174,6 @@ const EventPage = () => {
           <div key={event.eventId} className="event-card">
             <h3>Event : {event.eventName}</h3>
             <p>Date : {event.eventDate} </p>
-            {/* <p>Time : {event.eventTime}</p> */}
             <p>City : {event.location}</p>
             <p>Tickets Available: {event.totalTickets}</p>
             {userRole === "CUSTOMER" && (
@@ -136,13 +186,13 @@ const EventPage = () => {
               <div className="vendor-actions">
                 <button
                   onClick={() => handleStartProduceTickets(event.eventId)}
-           
+                  disabled={producingTickets[event.eventId]}
                 >
                   Start Produce Tickets
                 </button>
                 <button
                   onClick={() => handleStopProduceTickets(event.eventId)}
-                  
+                  disabled={!producingTickets[event.eventId]}
                 >
                   Stop Produce Tickets
                 </button>

@@ -138,7 +138,7 @@ const SideBar = () => {
                                         </li>
                                         <li className="side-item">
                                             <Link to="/events">
-                                                <FaHome />
+                                            <FaAddressBook size={19} />
                                                 <span> Events </span>
                                             </Link>
                                         </li>

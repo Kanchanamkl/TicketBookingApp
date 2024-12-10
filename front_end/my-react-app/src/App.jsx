@@ -6,8 +6,8 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import VenderRegister from "./pages/Register/VendorRegister";
 import CustomerRegister from "./pages/Register/CustomerRegister";
 
-import CustomerDashBoard from "./pages/DashBoard/CustomerDashBoard/CustomerDashboard";
-import AdminDashBoard from "./pages/DashBoard/AdminDashBoard/AdminDashboard";
+
+
 import VenderDashboard from "./pages/DashBoard/VenderDashBoard/VenderDashboard";
 import { StoreContext } from "./StoreContext/StoreContext";
 import SideBar from "./components/SideBar/SideBar";
@@ -43,7 +43,7 @@ function App() {
               <Route path="/" element={<UserPage />} />
   
               <Route path="/users" element={<UserPage />} />
-              <Route path="*" element={<PageNotFound />} />
+              <Route path="*" element={<UserPage />} />
             </Routes>
             <Footer />
           </>
@@ -53,11 +53,10 @@ function App() {
           <>
             <SideBar />
             <Routes>
-              <Route path="/" element={<EventPage />} />
-
+              <Route path="/" element={<VenderDashboard />} />
+              <Route path="/dashboard" element={<VenderDashboard />} />
               <Route path="/events" element={<EventPage />} />
-
-              <Route path="*" element={<PageNotFound />} />
+              <Route path="*" element={<EventPage />} />
             </Routes>
             <Footer />
           </>
@@ -67,11 +66,9 @@ function App() {
           <>
             <SideBar />
             <Routes>
-              <Route path="/" element={<CustomerDashBoard />} />
-              <Route path="/dashboard" element={<CustomerDashBoard />} />
-              <Route path="/events" element={<EventPage />} />
-
-              <Route path="*" element={<PageNotFound />} />
+              <Route path="/" element={<EventPage />} />
+              <Route path="/events" element={<EventPage/>} />
+              <Route path="*" element={<EventPage />} />
             </Routes>
 
             <Footer />
