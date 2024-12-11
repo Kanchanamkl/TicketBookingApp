@@ -118,7 +118,7 @@ const EventPage = () => {
         .get("http://localhost:8081/api/ticketing/check_ticketpool_status")
         .then((response) => {
           if (response.status === 201) {
-            toast.error("Max Ticket Pool Count exceeded", { autoClose: 3000 });
+            toast.error("Max Ticket Pool Count Exceeded", { autoClose: 3000 });
             clearInterval(intervalId);
             handleStopProduceTickets(eventId);
           }
@@ -234,10 +234,12 @@ const EventPage = () => {
                 <button
                   onClick={() => {
                     const ticketCount = parseInt(producingTickets[event.eventId], 10);
-                    if (ticketCount > 0 && ticketCount <= event.totalTickets) {
-                      handlePurchaseTicket(event.eventId , ticketCount);
+                    if (!ticketCount || ticketCount <= 0) {
+                      alert("Please enter a valid value for ticket count.");
+                    } else if (ticketCount > event.totalTickets) {
+                      alert("Selected ticket count exceeds the available tickets. Please select a lesser ticket count.");
                     } else {
-                      alert("Selected ticket count exceeds the available tickets. Please select lesser ticket count");
+                      handlePurchaseTicket(event.eventId, ticketCount);
                     }
                   }}
                 >
