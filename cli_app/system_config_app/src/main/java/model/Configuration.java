@@ -9,7 +9,7 @@ public class Configuration implements Serializable {
     private int ticketReleaseRate;
     private int customerRetrievalRate;
 
-    // Getters and Setters
+
     public int getMaxTicketPoolSize() { return maxTicketPoolSize; }
     public void setMaxTicketPoolSize(int maxTicketPoolSize) { this.maxTicketPoolSize = maxTicketPoolSize; }
 
@@ -20,7 +20,7 @@ public class Configuration implements Serializable {
     public void setCustomerRetrievalRate(int customerRetrievalRate) { this.customerRetrievalRate = customerRetrievalRate; }
 
 
-    // Save to JSON file
+
     public void saveToJson(String filePath) throws IOException {
         Gson gson = new Gson();
         try (Writer writer = new FileWriter(filePath)) {
@@ -28,7 +28,7 @@ public class Configuration implements Serializable {
         }
     }
 
-    // Load from JSON file
+
     public static Configuration loadFromJson(String filePath) throws IOException {
         Gson gson = new Gson();
         try (Reader reader = new FileReader(filePath)) {
