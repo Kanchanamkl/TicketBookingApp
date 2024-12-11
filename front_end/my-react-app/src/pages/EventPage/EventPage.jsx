@@ -13,10 +13,7 @@ const EventPage = () => {
   const [newEvent, setNewEvent] = useState({
     eventName: "",
     eventDate: "",
-    eventTime: "",
-    totalTickets: "",
     location: "",
-    ticketReleaseRate: "",
   });
   const [producingTickets, setProducingTickets] = useState({});
 
@@ -60,7 +57,6 @@ const EventPage = () => {
           eventTime: "",
           totalTickets: "",
           location: "",
-          ticketReleaseRate:""
         });
         }
       })
@@ -122,7 +118,7 @@ const EventPage = () => {
         .get("http://localhost:8081/api/ticketing/check_ticketpool_status")
         .then((response) => {
           if (response.status === 201) {
-            toast.error("Max pool count exceeded", { autoClose: 2000 });
+            toast.error("Max Ticket Pool Count exceeded", { autoClose: 3000 });
             clearInterval(intervalId);
             handleStopProduceTickets(eventId);
           }
@@ -157,13 +153,9 @@ const EventPage = () => {
   };
 
   const validateFields = () => {
-    const { eventName, eventDate, totalTickets, location } = newEvent;
-    if (!eventName || !eventDate || !totalTickets || !location) {
+    const { eventName, eventDate, location } = newEvent;
+    if (!eventName || !eventDate || !location) {
       alert("All fields are required.");
-      return false;
-    }
-    if (isNaN(totalTickets) || totalTickets <= 0) {
-      alert("Total tickets must be a positive number.");
       return false;
     }
     return true;
@@ -198,20 +190,6 @@ const EventPage = () => {
             type="date"
             name="eventDate"
             value={newEvent.eventDate}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="totalTickets"
-            placeholder="Max Ticket Count"
-            value={newEvent.totalTickets}
-            onChange={handleInputChange}
-          />
-          <input
-            type="number"
-            name="ticketReleaseRate"
-            placeholder="Ticket Release Rate (ms)"
-            value={newEvent.ticketReleaseRate}
             onChange={handleInputChange}
           />
           <input
@@ -269,7 +247,7 @@ const EventPage = () => {
             )}
 
             {userRole === "VENDOR" && (
-              <><p>Ticket Release Rate: {event.ticketReleaseRate} ms</p>
+              <>
               <div className="vendor-actions">
                 <button
                   onClick={() => handleStartProduceTickets(event.eventId)}
