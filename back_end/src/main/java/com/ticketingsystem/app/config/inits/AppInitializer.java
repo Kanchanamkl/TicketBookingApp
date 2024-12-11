@@ -41,11 +41,8 @@ public class AppInitializer implements CommandLineRunner {
 
             if (configFile.exists()) {
                 Configuration config = Configuration.loadFromJson("src/main/resources/config.json");
-                System.out.println("Loaded configuration: " + config);
+                System.out.println("Loaded configurations  : " + config);
 
-
-                this.ticketPool = new TicketPool(config.getMaxTicketCapacity());
-                System.out.println("Ticket pool initialized with max capacity: " + config.getMaxTicketCapacity());
             } else {
                 System.out.println("Configuration file not found. Please run the CLI tool first.");
             }

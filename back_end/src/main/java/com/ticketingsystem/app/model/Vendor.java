@@ -26,10 +26,9 @@ public class Vendor extends User implements Runnable {
 
 
 
-    public Vendor(Long vendorId, Event event, int ticketCount , TicketPool ticketPool , EventRepository eventRepository , UserRepository userRepository, TicketRepository ticketRepository) {
+    public Vendor(Long vendorId, Event event, TicketPool ticketPool , EventRepository eventRepository , UserRepository userRepository, TicketRepository ticketRepository) {
         this.event = event;
         this.vendorId = vendorId;
-        this.ticketCount = ticketCount;
         this.ticketPool=ticketPool;
         this.eventRepository=eventRepository;
         this.userRepository=userRepository;
@@ -45,21 +44,21 @@ public class Vendor extends User implements Runnable {
                 Event event_= eventRepository.findById(event.getEventId()).orElse(null);
                 User vendor = userRepository.findById(vendorId).orElse(null);
                 if(event_ != null){
-                    if (event_.isProducingTickets()) {
+                    if (event_.isProducingTickets()&!ticketPool.isTicketPoolSizeExceeded()) {
                         Ticket ticket = new Ticket(event_,vendor,null,TICKET_STATUS.UNSOLD);
                         ticketPool.addTicket(ticket);
+                        System.out.println("ticketPool.ticketList.size() : "+ticketPool.ticketList.size());
+                        System.out.println("Thread :["+Thread.currentThread().getId()+"] :"+"Vendor " + vendorId + " is producing tickets for event " + event.getEventId()+" | " +ticketPool.ticketList.size() + " Tickets added to the pool.");
                         event_.setTotalTickets(event_.getTotalTickets() + 1);
-
                         ticketRepository.save(ticket);
                         eventRepository.save(event_);
-                        System.out.println("Vendor " + vendorId + " is producing tickets for event " + event.getEventId());
                     }
                     Thread.sleep(event_.getTicketReleaseRate());
                     synchronized (lock) {
                         while (isStop && eventId == event.getEventId()) {
                             event_.setProducingTickets(false);
                             eventRepository.save(event_);
-                            System.out.println("Vendor " + vendorId + " is not producing tickets for event " + event.getEventId());
+                            System.out.println("Thread :["+Thread.currentThread().getId()+"] :"+"Vendor " + vendorId + " is stopped producing tickets for event " + event.getEventId());
                             lock.wait();
                             Thread.currentThread().interrupt();
                         }
@@ -68,7 +67,7 @@ public class Vendor extends User implements Runnable {
 
             }
         } catch (InterruptedException e) {
-            System.out.println("Vendor " + vendorId + " interrupted.");
+            System.out.println("Thread :["+Thread.currentThread().getId()+"] :"+"Vendor " + vendorId + " interrupted.");
         }
     }
 

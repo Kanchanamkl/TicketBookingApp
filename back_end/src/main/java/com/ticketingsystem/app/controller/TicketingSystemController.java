@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,17 +24,21 @@ import java.util.Optional;
 public class TicketingSystemController {
     private final EventService eventService;
     private final EventRepository eventRepository;
-    private static final TicketPool ticketPool = new TicketPool(1000); // Example capacity
+    private static Configuration config;
+
     private final UserService userService;
     private final UserRepository userRepository;
     private final TicketRepository ticketRepository;
+    private  final TicketPool ticketPool;
 
-    public TicketingSystemController(EventService eventService, EventRepository eventRepository, UserService userService, UserRepository userRepository, TicketRepository ticketRepository) {
+    public TicketingSystemController(EventService eventService, EventRepository eventRepository, UserService userService, UserRepository userRepository, TicketRepository ticketRepository) throws IOException {
         this.eventService = eventService;
         this.eventRepository = eventRepository;
         this.userService = userService;
         this.userRepository = userRepository;
         this.ticketRepository = ticketRepository;
+        config = Configuration.loadFromJson("src/main/resources/config.json");
+        ticketPool = new TicketPool(config.getMaxTicketPoolSize());
     }
 
 
@@ -50,7 +55,7 @@ public class TicketingSystemController {
     }
 
     @PostMapping("/start_produce_tickets")
-    public String startProduceTickets(@RequestParam Long vendorId, @RequestParam Long eventId, @RequestParam int ticketCount) {
+    public String startProduceTickets(@RequestParam Long vendorId, @RequestParam Long eventId) {
 
         Event event = eventRepository.findById(eventId).orElse(null);
 
@@ -68,7 +73,7 @@ public class TicketingSystemController {
                 event.setProducingTickets(true);
                 eventRepository.save(event);
 
-                Vendor vendor = new Vendor(user.getUserId(), event, ticketCount, ticketPool, eventRepository,userRepository,ticketRepository );
+                Vendor vendor = new Vendor(user.getUserId(), event, ticketPool, eventRepository,userRepository,ticketRepository );
                 new Thread(vendor).start();
                 return "Requested Tickets are being produced.";
             }
@@ -115,6 +120,15 @@ public class TicketingSystemController {
     public ResponseEntity<Long> getUnsoldTicketCount() {
         long unsoldTicketCount = ticketRepository.countByStatus(TICKET_STATUS.SOLD);
         return ResponseEntity.ok(unsoldTicketCount);
+    }
+
+    @GetMapping("/check_ticketpool_status")
+    public ResponseEntity<String> checkTicketPoolStatus() {
+        if (ticketPool.isTicketPoolSizeExceeded()) {
+            return ResponseEntity.status(201).body("TicketPool size has exceeded the maximum limit.");
+        } else {
+            return ResponseEntity.ok("TicketPool size is within the limit.");
+        }
     }
 
 }

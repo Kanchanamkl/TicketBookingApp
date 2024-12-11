@@ -7,16 +7,16 @@ import java.util.List;
 
 public class TicketPool {
     public final List<Ticket> ticketList;
-    private final int ticketPoolSize;
+    private final int maxPoolSize;
 
-    public TicketPool( int ticketPoolSize) {
-        ticketList = Collections.synchronizedList(new ArrayList<>(ticketPoolSize));
-        this.ticketPoolSize = ticketPoolSize;
+    public TicketPool( int maxPoolSize) {
+        ticketList = Collections.synchronizedList(new ArrayList<>());
+        this.maxPoolSize = maxPoolSize;
+        System.out.println("Ticket Pool initialized with max pool size: " + maxPoolSize);
     }
 
     public synchronized void addTicket(Ticket ticket) {
         ticketList.add(ticket);
-        System.out.println(ticketList.size() + " Tickets added to the pool." );
     }
 
     public synchronized Ticket removeTicket(Ticket ticket) {
@@ -24,7 +24,7 @@ public class TicketPool {
             ticketList.remove(ticket);
             return ticket;
         }
-        System.out.println("Ticket not found in the pool.");
+        System.out.println("Thread :["+Thread.currentThread().getId()+"] :"+"Ticket not found in the pool.");
         return null;
 
     }
@@ -41,7 +41,7 @@ public class TicketPool {
     }
 
     public synchronized List<Ticket> getTicketsRequestedCountByEventId(long eventId, int ticketCount) {
-        System.out.println("TicketPool getTicketsRequestedCountByEventId: " + eventId + " Ticket Count: " + ticketCount);
+        System.out.println("Thread :["+Thread.currentThread().getId()+"] :"+"TicketPool getTicketsRequestedCountByEventId: " + eventId + " Ticket Count: " + ticketCount);
         List<Ticket> tickets = new ArrayList<>();
         for (Ticket ticket : ticketList) {
             if (ticket.getEvent().getEventId() == eventId && ticketCount > 0) {
@@ -51,6 +51,10 @@ public class TicketPool {
         }
         return tickets;
 
+    }public synchronized boolean isTicketPoolSizeExceeded() {
+        return ticketList.size() >= maxPoolSize;
     }
+
+
 
 }

@@ -37,7 +37,6 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setUsername(userDTO.getUsername());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         User updatedUser = userRepository.save(user);
 
@@ -60,7 +59,6 @@ public class UserService {
                     .username(userDTO.getUsername())
                     .password(passwordEncoder.encode(userDTO.getPassword()))
                     .role(userDTO.getRole())
-                    .phoneNumber(userDTO.getPhoneNumber())
                     .build();
 
             userRepository.save(user);
