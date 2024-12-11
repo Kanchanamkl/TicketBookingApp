@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import "./EventPageStyles.scss";
 import { StoreContext } from "../../StoreContext/StoreContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EventPage = () => {
   const { role, userId } = useContext(StoreContext);
@@ -41,7 +43,8 @@ const EventPage = () => {
     axios
       .post("http://localhost:8081/api/ticketing/create_event", newEvent)
       .then((response) => {
-        axios
+        if (response.status === 200) {
+          axios
           .get("http://localhost:8081/api/ticketing/events")
           .then((response) => {
             if (Array.isArray(response.data)) {
@@ -59,6 +62,7 @@ const EventPage = () => {
           location: "",
           ticketReleaseRate:""
         });
+        }
       })
       .catch((error) => console.error("Error creating event:", error));
   };
@@ -103,9 +107,28 @@ const EventPage = () => {
     axios
       .post(`http://localhost:8081/api/ticketing/start_produce_tickets?vendorId=${userId}&eventId=${eventId}&ticketCount=${100}`)
       .then((response) => {
-        console.log("Started producing tickets:", response.data);
+        if(response.status === 200){
+          toast.success("Started producing tickets", { autoClose: 2000 });
+          console.log("Started producing tickets:", response.data);
+          checkTicketPoolStatus(eventId);
+        }
       })
       .catch((error) => console.error("Error starting ticket production:", error));
+  };
+
+  const checkTicketPoolStatus = (eventId) => {
+    const intervalId = setInterval(() => {
+      axios
+        .get("http://localhost:8081/api/ticketing/check_ticketpool_status")
+        .then((response) => {
+          if (response.status === 201) {
+            toast.error("Max pool count exceeded", { autoClose: 2000 });
+            clearInterval(intervalId);
+            handleStopProduceTickets(eventId);
+          }
+        })
+        .catch((error) => console.error("Error checking ticket pool status:", error));
+    }, 1000);
   };
 
   const handleStopProduceTickets = (eventId) => {
@@ -116,17 +139,19 @@ const EventPage = () => {
     axios
       .post(`http://localhost:8081/api/ticketing/stop_produce_tickets?vendorId=${userId}&eventId=${eventId}`)
       .then((response) => {
-        console.log("Stopped producing tickets:", response.data);
-        axios
-          .get("http://localhost:8081/api/ticketing/events")
-          .then((response) => {
-            if (Array.isArray(response.data)) {
-              setEvents(response.data);
-            } else {
-              console.error("Error: Expected an array of events");
-            }
-          })
-          .catch((error) => console.error("Error fetching events:", error));
+        if (response.status === 200) {
+          console.log("Stopped producing tickets:", response.data);
+          axios
+            .get("http://localhost:8081/api/ticketing/events")
+            .then((response) => {
+              if (Array.isArray(response.data)) {
+                setEvents(response.data);
+              } else {
+                console.error("Error: Expected an array of events");
+              }
+            })
+            .catch((error) => console.error("Error fetching events:", error));
+        }
       })
       .catch((error) => console.error("Error stopping ticket production:", error));
   };
@@ -146,6 +171,18 @@ const EventPage = () => {
 
   return (
     <div className="event-page">
+                      <ToastContainer
+                    position="top-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                />
       <h1>Events</h1>
       {userRole === "VENDOR" && (
         <div className="create-event">

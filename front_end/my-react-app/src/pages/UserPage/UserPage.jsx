@@ -3,6 +3,7 @@ import axios from "axios";
 import "./UserPageStyles.scss";
 import Table from "../../components/Table/Table";
 import Swal from "sweetalert2";
+import SectionContainer from "../../components/SectionContainer/SectionContainer";
 
 const UserPage = () => {
   const [users, setUsers] = useState([]);
@@ -167,7 +168,8 @@ const UserPage = () => {
 
   return (
     <div className="admin-users-container">
-      <h1>Admin User Page</h1>
+      <SectionContainer >
+   
       <div className="filters">
         <button onClick={() => handleFilterChange("ALL")}>ALL</button>
         <button onClick={() => handleFilterChange("VENDOR")}>VENDORS</button>
@@ -228,6 +230,7 @@ const UserPage = () => {
       ) : (
         <Table headers={tableHeaders} body={tableBody} />
       )}
+    </SectionContainer>
     </div>
   );
 };
