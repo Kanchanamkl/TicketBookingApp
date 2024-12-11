@@ -1,1 +1,1 @@
-{"maxTicketPoolSize":10,"ticketReleaseRate":1000,"customerRetrievalRate":1000}
+{"maxTicketPoolSize":40,"ticketReleaseRate":500,"customerRetrievalRate":1000}

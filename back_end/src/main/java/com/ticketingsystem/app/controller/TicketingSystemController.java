@@ -38,7 +38,7 @@ public class TicketingSystemController {
         this.userRepository = userRepository;
         this.ticketRepository = ticketRepository;
         config = Configuration.loadFromJson("src/main/resources/config.json");
-        ticketPool = new TicketPool(config.getMaxTicketPoolSize());
+        ticketPool = new TicketPool(config.getMaxTicketPoolSize(),config.getTicketReleaseRate());
     }
 
 

@@ -47,13 +47,12 @@ public class Vendor extends User implements Runnable {
                     if (event_.isProducingTickets()&!ticketPool.isTicketPoolSizeExceeded()) {
                         Ticket ticket = new Ticket(event_,vendor,null,TICKET_STATUS.UNSOLD);
                         ticketPool.addTicket(ticket);
-                        System.out.println("ticketPool.ticketList.size() : "+ticketPool.ticketList.size());
                         System.out.println("Thread :["+Thread.currentThread().getId()+"] :"+"Vendor " + vendorId + " is producing tickets for event " + event.getEventId()+" | " +ticketPool.ticketList.size() + " Tickets added to the pool.");
                         event_.setTotalTickets(event_.getTotalTickets() + 1);
                         ticketRepository.save(ticket);
                         eventRepository.save(event_);
                     }
-                    Thread.sleep(event_.getTicketReleaseRate());
+                    Thread.sleep(ticketPool.ticketReleaseRate);
                     synchronized (lock) {
                         while (isStop && eventId == event.getEventId()) {
                             event_.setProducingTickets(false);

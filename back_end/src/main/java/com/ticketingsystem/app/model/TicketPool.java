@@ -1,6 +1,8 @@
 package com.ticketingsystem.app.model;
 
 
+import org.hibernate.query.sqm.mutation.internal.cte.CteInsertHandler;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,10 +10,12 @@ import java.util.List;
 public class TicketPool {
     public final List<Ticket> ticketList;
     private final int maxPoolSize;
+    public final int ticketReleaseRate;
 
-    public TicketPool( int maxPoolSize) {
+    public TicketPool( int maxPoolSize, int ticketReleaseRate) {
         ticketList = Collections.synchronizedList(new ArrayList<>());
         this.maxPoolSize = maxPoolSize;
+        this.ticketReleaseRate = ticketReleaseRate;
         System.out.println("Ticket Pool initialized with max pool size: " + maxPoolSize);
     }
 

@@ -20,10 +20,8 @@ public class EventService {
         Event event =Event.builder()
                 .eventName(eventDTO.getEventName())
                 .eventDate(eventDTO.getEventDate())
-                .maxTicketCount(eventDTO.getMaxTicketCount())
                 .eventTime(eventDTO.getEventTime())
                 .location(eventDTO.getLocation())
-                .ticketReleaseRate(eventDTO.getTicketReleaseRate())
                 .isProducingTickets(false)
                 .build();
        eventRepository.save(event);
@@ -31,7 +29,6 @@ public class EventService {
         return EventDTO.builder()
                 .eventName(eventDTO.getEventName())
                 .eventDate(eventDTO.getEventDate())
-                .maxTicketCount(eventDTO.getMaxTicketCount())
                 .build();
     }
 }
