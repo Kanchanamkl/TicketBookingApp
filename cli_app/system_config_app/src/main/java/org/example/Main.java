@@ -10,7 +10,7 @@ public class Main {
         Configuration config = new Configuration();
 
 
-        config.setTotalTickets(promptForPositiveInt(scanner, "Enter the total number of tickets: "));
+        config.setMaxTicketPoolSize(promptForPositiveInt(scanner, "Enter max pool size of tickets: "));
 
 
         config.setTicketReleaseRate(promptForPositiveInt(scanner, "Enter the ticket release rate (ms): "));
@@ -19,7 +19,6 @@ public class Main {
         config.setCustomerRetrievalRate(promptForPositiveInt(scanner, "Enter the customer retrieval rate (ms): "));
 
 
-        config.setMaxTicketCapacity(promptForPositiveInt(scanner, "Enter the maximum ticket capacity: "));
 
 
         System.out.println("Configuration saved: " + config);
